@@ -8,11 +8,16 @@ import {
 const subscriptionKey = process.env.TTS_AZURE_API_KEY;
 const serviceRegion = process.env.TTS_AZURE_REGION;
 
+interface TTSServiceOptions {
+  language?: string;
+  voiceName?: string;
+}
+
 export class TTSService {
   private speechConfig: SpeechConfig;
   private synthesizer: SpeechSynthesizer;
 
-  constructor() {
+  constructor({ language, voiceName }: TTSServiceOptions = {}) {
     assert(subscriptionKey, "TTS_AZURE_API_KEY is not set");
     assert(serviceRegion, "TTS_AZURE_REGION is not set");
 
@@ -20,8 +25,8 @@ export class TTSService {
       subscriptionKey,
       serviceRegion,
     );
-    this.speechConfig.speechSynthesisLanguage = "zh-CN";
-    this.speechConfig.speechSynthesisVoiceName = "zh-CN-XiaoxiaoNeural";
+    this.speechConfig.speechSynthesisLanguage = language ?? "zh-CN";
+    this.speechConfig.speechSynthesisVoiceName = voiceName ?? "zh-CN-XiaoxiaoNeural";
 
     this.synthesizer = new SpeechSynthesizer(this.speechConfig);
   }
