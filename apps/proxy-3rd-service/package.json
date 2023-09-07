@@ -9,8 +9,11 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "bufferutil": "^4.0.7",
+    "microsoft-cognitiveservices-speech-sdk": "^1.32.0",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "utf-8-validate": "^5.0.2"
   },
   "devDependencies": {
     "@types/node": "20.5.9",

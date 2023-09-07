@@ -56,12 +56,21 @@ importers:
 
   apps/proxy-3rd-service:
     dependencies:
+      bufferutil:
+        specifier: ^4.0.7
+        version: 4.0.7
+      microsoft-cognitiveservices-speech-sdk:
+        specifier: ^1.32.0
+        version: 1.32.0(bufferutil@4.0.7)(utf-8-validate@5.0.2)
       react:
         specifier: ^18.2.0
         version: 18.2.0
       react-dom:
         specifier: ^18.2.0
         version: 18.2.0(react@18.2.0)
+      utf-8-validate:
+        specifier: ^5.0.2
+        version: 5.0.2
     devDependencies:
       '@types/node':
         specifier: 20.5.9
@@ -1081,6 +1090,20 @@ packages:
     engines: {node: '>=0.4.0'}
     dev: true
 
+  /agent-base@5.1.1:
+    resolution: {integrity: sha512-TMeqbNl2fMW0nMjTEPOwe3J/PRFP4vqeoNuQMG0HlMrtm5QxKqdvAkZ1pRBQ/ulIyDD5Yq0nJ7YbdD8ey0TO3g==}
+    engines: {node: '>= 6.0.0'}
+    dev: false
+
+  /agent-base@6.0.2:
+    resolution: {integrity: sha512-RZNwNclF7+MS/8bDg70amg32dyeZGZxiDuQmZxKLAlQjr3jGyLx+4Kkk58UO7D2QdgFIQCovuSuZESne6RG6XQ==}
+    engines: {node: '>= 6.0.0'}
+    dependencies:
+      debug: 4.3.4
+    transitivePeerDependencies:
+      - supports-color
+    dev: false
+
   /agent-base@7.1.0:
     resolution: {integrity: sha512-o/zjMZRhJxny7OyEF+Op8X+efiELC7k7yOjMzgfzVqOzXqkBkWI79YoTdOtsuWd5BWhAGAuOY/Xa6xpiaWXiNg==}
     engines: {node: '>= 14'}
@@ -1301,6 +1324,14 @@ packages:
     engines: {node: '>=10.0.0'}
     dev: true
 
+  /bent@7.3.12:
+    resolution: {integrity: sha512-T3yrKnVGB63zRuoco/7Ybl7BwwGZR0lceoVG5XmQyMIH9s19SV5m+a8qam4if0zQuAmOQTyPTPmsQBdAorGK3w==}
+    dependencies:
+      bytesish: 0.4.4
+      caseless: 0.12.0
+      is-stream: 2.0.1
+    dev: false
+
   /big-integer@1.6.51:
     resolution: {integrity: sha512-GPEid2Y9QU1Exl1rpO9B2IPJGHPSupF5GnVIP0blYvNOMer2bTvSWs1jGOUg04hTmu67nmLsQ9TBo1puaotBHg==}
     engines: {node: '>=0.6'}
@@ -1363,6 +1394,14 @@ packages:
       ieee754: 1.2.1
     dev: true
 
+  /bufferutil@4.0.7:
+    resolution: {integrity: sha512-kukuqc39WOHtdxtw4UScxF/WVnMFVSQVKhtx3AjZJzhd0RGZZldcrfSEbVsWWe6KNH253574cq5F+wpv0G9pJw==}
+    engines: {node: '>=6.14.2'}
+    requiresBuild: true
+    dependencies:
+      node-gyp-build: 4.6.1
+    dev: false
+
   /builtin-modules@3.3.0:
     resolution: {integrity: sha512-zhaCDicdLuWN5UbN5IMnFqNMhNfo919sH85y2/ea+5Yg9TsTkeZxpL+JLbp6cgYFS4sRLp3YV4S6yDuqVWHYOw==}
     engines: {node: '>=6'}
@@ -1386,6 +1425,10 @@ packages:
     engines: {node: '>=10.16.0'}
     dependencies:
       streamsearch: 1.1.0
+
+  /bytesish@0.4.4:
+    resolution: {integrity: sha512-i4uu6M4zuMUiyfZN4RU2+i9+peJh//pXhd9x1oSe1LBkZ3LEbCoygu8W0bXTukU1Jme2txKuotpCZRaC3FLxcQ==}
+    dev: false
 
   /call-bind@1.0.2:
     resolution: {integrity: sha512-7O+FbCihrB5WGbFYesctwmTKae6rOiIzmz1icreWJ+0aA7LJfuqhEso2T9ncpcFtzMQtzXf2QGGueWJGTYsqrA==}
@@ -1413,6 +1456,10 @@ packages:
 
   /caniuse-lite@1.0.30001522:
     resolution: {integrity: sha512-TKiyTVZxJGhsTszLuzb+6vUZSjVOAhClszBr2Ta2k9IwtNBT/4dzmL6aywt0HCgEZlmwJzXJd8yNiob6HgwTRg==}
+
+  /caseless@0.12.0:
+    resolution: {integrity: sha512-4tYFyifaFfGacoiObjJegolkwSU4xQNGbVgUiNYVUxbQ2x2lUsFvY4hVgVzGiIe6WLOPqycWXA40l+PWsxthUw==}
+    dev: false
 
   /chalk@2.4.2:
     resolution: {integrity: sha512-Mti+f9lpJNcwF4tWV8/OrTTtF1gZi+f8FqlyAdouralcFWFQWF2+NgCHShjkCb+IFBLq9buZwE1xckQU4peSuQ==}
@@ -1619,7 +1666,6 @@ packages:
         optional: true
     dependencies:
       ms: 2.1.2
-    dev: true
 
   /deep-equal@2.2.1:
     resolution: {integrity: sha512-lKdkdV6EOGoVn65XaOsPdH4rMxTZOnmFyuIkMjM1i5HHCbfjC97dawgTAy0deYNfuqUqW+Q5VrVaQYtUpSd6yQ==}
@@ -2825,6 +2871,16 @@ packages:
       - supports-color
     dev: true
 
+  /https-proxy-agent@4.0.0:
+    resolution: {integrity: sha512-zoDhWrkR3of1l9QAL8/scJZyLu8j/gBkcwcaQOZh7Gyh/+uJQzGVETdgT30akuwkpL8HTRfssqI3BZuV18teDg==}
+    engines: {node: '>= 6.0.0'}
+    dependencies:
+      agent-base: 5.1.1
+      debug: 4.3.4
+    transitivePeerDependencies:
+      - supports-color
+    dev: false
+
   /https-proxy-agent@7.0.1:
     resolution: {integrity: sha512-Eun8zV0kcYS1g19r78osiQLEFIRspRUDd9tIfBCTBPBeMieF/EsJNL8VI3xOIdYRDEkjQnqOYPsZ2DsWsVsFwQ==}
     engines: {node: '>= 14'}
@@ -3145,7 +3201,6 @@ packages:
   /is-stream@2.0.1:
     resolution: {integrity: sha512-hFoiJiTl63nn+kstHGBtewWSKnQLpyb155KHheA1l39uvtO9nWIop1p3udqPcUd/xbF1VLMO4n7OI6p7RbngDg==}
     engines: {node: '>=8'}
-    dev: true
 
   /is-stream@3.0.0:
     resolution: {integrity: sha512-LnQR4bZ9IADDRSkvpqMGvt/tEJWclzklNgSw48V5EAaAeDd6qGvN8ei6k5p0tvxSR171VmGyHuTiAOfxAbr8kA==}
@@ -3427,6 +3482,20 @@ packages:
       picomatch: 2.3.1
     dev: true
 
+  /microsoft-cognitiveservices-speech-sdk@1.32.0(bufferutil@4.0.7)(utf-8-validate@5.0.2):
+    resolution: {integrity: sha512-TQqCIytCvW7x8MB2UT8DfyZkIjO34CSpy0zYlbQChkYWrYNzGgMIAA3uTGuYGj8hb0xMQBwRfqyAc5sA2VRgjQ==}
+    dependencies:
+      agent-base: 6.0.2
+      bent: 7.3.12
+      https-proxy-agent: 4.0.0
+      uuid: 9.0.0
+      ws: 7.5.9(bufferutil@4.0.7)(utf-8-validate@5.0.2)
+    transitivePeerDependencies:
+      - bufferutil
+      - supports-color
+      - utf-8-validate
+    dev: false
+
   /mimic-fn@2.1.0:
     resolution: {integrity: sha512-OqbOk5oEQeAZ8WXWydlu9HJjz9WVdEIvamMCcXmuqUYjTknH/sqsWvhQ3vgwKFRR1HpjvNBKQ37nbJgYzGqGcg==}
     engines: {node: '>=6'}
@@ -3467,7 +3536,6 @@ packages:
 
   /ms@2.1.2:
     resolution: {integrity: sha512-sGkPx+VjMtmA6MX27oA4FBFELFCZZ4S4XqeGOXCv68tT+jb3vk/RyaKWP0PTKyWtmLSM0b+adUTEvbs1PEaH2w==}
-    dev: true
 
   /ms@2.1.3:
     resolution: {integrity: sha512-6FlzubTLZG3J2a/NVCAleEhjzq5oxgHyaCU9yYXvcLsvoVaHJq/s5xXI6/XXP6tz7R9xAOtHnSO/tXtF3WRTlA==}
@@ -3547,6 +3615,16 @@ packages:
     dependencies:
       lower-case: 1.1.4
     dev: true
+
+  /node-gyp-build@3.7.0:
+    resolution: {integrity: sha512-L/Eg02Epx6Si2NXmedx+Okg+4UHqmaf3TNcxd50SF9NQGcJaON3AtU++kax69XV7YWz4tUspqZSAsVofhFKG2w==}
+    hasBin: true
+    dev: false
+
+  /node-gyp-build@4.6.1:
+    resolution: {integrity: sha512-24vnklJmyRS8ViBNI8KbtK/r/DmXQMRiOMXTNz2nrTnAYUwjmEEbnnpB/+kt+yWRv73bPsSPRFddrcIbAxSiMQ==}
+    hasBin: true
+    dev: false
 
   /node-plop@0.26.3:
     resolution: {integrity: sha512-Cov028YhBZ5aB7MdMWJEmwyBig43aGL5WT4vdoB28Oitau1zZAcHUn8Sgfk9HM33TqhtLJ9PlM/O0Mv+QpV/4Q==}
@@ -4942,9 +5020,21 @@ packages:
       punycode: 2.3.0
     dev: true
 
+  /utf-8-validate@5.0.2:
+    resolution: {integrity: sha512-SwV++i2gTD5qh2XqaPzBnNX88N6HdyhQrNNRykvcS0QKvItV9u3vPEJr+X5Hhfb1JC0r0e1alL0iB09rY8+nmw==}
+    requiresBuild: true
+    dependencies:
+      node-gyp-build: 3.7.0
+    dev: false
+
   /util-deprecate@1.0.2:
     resolution: {integrity: sha512-EPD5q1uXyFxJpCrLnCc1nHnq3gOa6DZBocAIiI2TaSCA7VCJ1UJDMagCzIkXNsUYfD1daK//LTEQ8xiIbrHtcw==}
     dev: true
+
+  /uuid@9.0.0:
+    resolution: {integrity: sha512-MXcSTerfPa4uqyzStbRoTgt5XIe3x5+42+q1sDuy3R5MDk66URdLMOZe5aPX/SQd+kuYAh0FdP/pO28IkQyTeg==}
+    hasBin: true
+    dev: false
 
   /v8-compile-cache-lib@3.0.1:
     resolution: {integrity: sha512-wa7YjyUGfNZngI/vtK0UHAN+lgDCxBPCylVXGp0zu59Fz5aiGtNXaq3DhIov063MorB+VfufLh3JlF2KdTK3xg==}
@@ -5060,6 +5150,22 @@ packages:
   /wrappy@1.0.2:
     resolution: {integrity: sha512-l4Sp/DRseor9wL6EvV2+TuQn63dMkPjZ/sp9XkghTEbV9KlPS1xUsZ3u7/IQO4wxtcFB4bgpQPRcR3QCvezPcQ==}
     dev: true
+
+  /ws@7.5.9(bufferutil@4.0.7)(utf-8-validate@5.0.2):
+    resolution: {integrity: sha512-F+P9Jil7UiSKSkppIiD94dN07AwvFixvLIj1Og1Rl9GGMuNipJnV9JzjD6XuqmAeiswGvUmNLjr5cFuXwNS77Q==}
+    engines: {node: '>=8.3.0'}
+    peerDependencies:
+      bufferutil: ^4.0.1
+      utf-8-validate: ^5.0.2
+    peerDependenciesMeta:
+      bufferutil:
+        optional: true
+      utf-8-validate:
+        optional: true
+    dependencies:
+      bufferutil: 4.0.7
+      utf-8-validate: 5.0.2
+    dev: false
 
   /yallist@3.1.1:
     resolution: {integrity: sha512-a4UGQaWPH59mOXUYnAG2ewncQS4i4F43Tv3JoAM+s2VDAmS9NsK8GpDMLrCHPksFT7h3K6TOoUNn2pb7RoXx4g==}
