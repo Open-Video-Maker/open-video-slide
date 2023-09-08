@@ -1,4 +1,4 @@
-import { TTSService } from "../../../services/tts";
+import { TTSService } from "@/services/tts";
 
 export async function POST(request: Request) {
   const { text, language, voiceName } = await request.json();
