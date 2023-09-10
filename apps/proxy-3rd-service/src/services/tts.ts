@@ -26,7 +26,8 @@ export class TTSService {
       serviceRegion,
     );
     this.speechConfig.speechSynthesisLanguage = language ?? "zh-CN";
-    this.speechConfig.speechSynthesisVoiceName = voiceName ?? "zh-CN-XiaoxiaoNeural";
+    this.speechConfig.speechSynthesisVoiceName =
+      voiceName ?? "zh-CN-XiaoxiaoNeural";
 
     this.synthesizer = new SpeechSynthesizer(this.speechConfig);
   }
@@ -36,6 +37,33 @@ export class TTSService {
       console.log("speakTextAsync", text);
       this.synthesizer.speakTextAsync(
         text,
+        (result) => {
+          if (result.reason === ResultReason.SynthesizingAudioCompleted) {
+            resolve(result.audioData);
+          } else {
+            console.trace(
+              "Speech synthesis canceled, " +
+                result.errorDetails +
+                "\nDid you update the subscription info?",
+            );
+            reject(result.errorDetails);
+          }
+          this.synthesizer.close();
+        },
+        (err) => {
+          console.trace("err - " + err);
+          reject(err);
+          this.synthesizer.close();
+        },
+      );
+    });
+  }
+
+  speakSSMLAsync(ssml: string) {
+    return new Promise<ArrayBuffer>((resolve, reject) => {
+      console.log("speakSSMLAsync", ssml);
+      this.synthesizer.speakSsmlAsync(
+        ssml,
         (result) => {
           if (result.reason === ResultReason.SynthesizingAudioCompleted) {
             resolve(result.audioData);
