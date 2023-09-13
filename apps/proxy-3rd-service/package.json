@@ -1,0 +1,36 @@
+{
+  "name": "proxy-3rd-service",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev -p 4100",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "test": "vitest"
+  },
+  "dependencies": {
+    "bufferutil": "^4.0.7",
+    "es-main": "^1.3.0",
+    "microsoft-cognitiveservices-speech-sdk": "^1.32.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "ssml-document": "^1.1.4",
+    "utf-8-validate": "^5.0.2"
+  },
+  "devDependencies": {
+    "@types/node": "20.5.9",
+    "@types/react": "18.2.21",
+    "@types/react-dom": "18.2.7",
+    "@vitejs/plugin-react": "^4.0.4",
+    "autoprefixer": "10.4.15",
+    "eslint": "^8.48.0",
+    "eslint-config-next": "13.4.19",
+    "jsdom": "^22.1.0",
+    "next": "^13.4.19",
+    "postcss": "8.4.29",
+    "tailwindcss": "3.3.3",
+    "typescript": "5.2.2",
+    "vitest": "^0.34.4"
+  }
+}
