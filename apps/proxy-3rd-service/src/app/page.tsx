@@ -1,6 +1,19 @@
 "use client";
 
 import { useState } from "react";
+import {
+  Card,
+  Text,
+  Button,
+  Group,
+  ActionIcon,
+  Progress,
+  Select,
+  Slider,
+  Stack,
+  Textarea,
+} from "@mantine/core";
+import { IconPlayerPlay } from "@tabler/icons-react";
 
 export default function Home() {
   const [text, setText] = useState("");
@@ -16,45 +29,101 @@ export default function Home() {
     });
     const buffer = await res.arrayBuffer();
 
-    // const audioContext = new AudioContext();
-    // audioContext.decodeAudioData(buffer, (audioBuffer) => {
-    //   const source = audioContext.createBufferSource();
-    //   source.buffer = audioBuffer;
-    //   source.connect(audioContext.destination);
-    //   source.start();
-    // });
+    const audioContext = new AudioContext();
+    audioContext.decodeAudioData(buffer, (audioBuffer) => {
+      const source = audioContext.createBufferSource();
+      source.buffer = audioBuffer;
+      source.connect(audioContext.destination);
+      source.start();
+    });
 
-    const url = URL.createObjectURL(new Blob([buffer], { type: "audio/wav" }));
+    // const url = URL.createObjectURL(new Blob([buffer], { type: "audio/wav" }));
 
-    setResult(url);
+    // setResult(url);
   };
+
+  const textValid = text.length > 0;
 
   return (
     <main className="flex flex-col items-center py-8 w-1/2 m-auto">
-      <h1 className="text-2xl my-2 font-bold">TTS playgroud</h1>
+      <h1 className="text-2xl my-6 font-bold">TTS playground</h1>
       <div className="w-full">
-        <section className="flex justify-center my-4">
-          <textarea
-            className="w-2/3 min-h-full h-80 p-2"
-            value={text}
-            onChange={(e) => setText(e.target.value)}
-          ></textarea>
-        </section>
-        <section className="flex justify-center my-4"></section>
-        <section className="flex justify-center my-4">
-          <button
-            className="border p-2 bg-slate-50"
-            onClick={() => generate(text)}
-          >
-            Generate
-          </button>
-        </section>
-        <section className="flex justify-center my-4">
-          <div>
-            <h2>Result</h2>
-            <div>{result && <audio controls src={result}></audio>}</div>
-          </div>
-        </section>
+        <Card shadow="sm" padding="lg" radius="md" withBorder>
+          <Text mb="lg">Text to speech</Text>
+
+          <Stack gap="xl">
+            <Select
+              size="md"
+              label="Language"
+              placeholder="Pick value"
+              data={["React", "Angular", "Vue", "Svelte"]}
+            />
+            <Group grow gap="xl">
+              <Select
+                size="md"
+                label="Voice"
+                placeholder="Pick value"
+                data={["React", "Angular", "Vue", "Svelte"]}
+              />
+              <Select
+                size="md"
+                label="Voice style"
+                placeholder="Pick value"
+                data={["React", "Angular", "Vue", "Svelte"]}
+              />
+            </Group>
+            <Group grow gap="xl" style={{ alignItems: "stretch" }}>
+              <Stack gap={0} justify="space-between">
+                <Text size="md" fw={500}>
+                  Speech speed
+                </Text>
+                <Slider
+                  size="sm"
+                  mt="xs"
+                  style={{ flex: 1 }}
+                  color="blue"
+                  marks={[
+                    { value: 0, label: "Slow" },
+                    { value: 50, label: "Regular" },
+                    { value: 100, label: "Fast" },
+                  ]}
+                />
+              </Stack>
+              <Select
+                size="md"
+                label="Voice pitch"
+                placeholder="Pick value"
+                data={["React", "Angular", "Vue", "Svelte"]}
+              />
+            </Group>
+            <Textarea
+              autosize
+              size="md"
+              minRows={5}
+              aria-label="Text prepared for TTS"
+              placeholder="Type your text in here"
+              value={text}
+              onChange={(e) => setText(e.target.value)}
+            />
+          </Stack>
+
+          <Group grow gap="xl" my="sm">
+            <Group p="xs">
+              <ActionIcon
+                variant="filled"
+                aria-label="Generate"
+                disabled={!textValid}
+                onClick={() => generate(text)}
+              >
+                <IconPlayerPlay style={{ width: "70%", height: "70%" }} />
+              </ActionIcon>
+              <Progress style={{ flex: 1 }} value={0} />
+            </Group>
+            <Button disabled={!textValid} variant="filled">
+              Save to media
+            </Button>
+          </Group>
+        </Card>
       </div>
     </main>
   );
