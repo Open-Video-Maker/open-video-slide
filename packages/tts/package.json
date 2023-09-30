@@ -1,0 +1,21 @@
+{
+  "name": "tts",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "microsoft-cognitiveservices-speech-sdk": "^1.32.0"
+  },
+  "devDependencies": {
+    "@types/node": "20.5.9",
+    "autoprefixer": "10.4.15",
+    "eslint": "^8.48.0",
+    "eslint-config-next": "13.4.19",
+    "typescript": "5.2.2"
+  }
+}

@@ -19,6 +19,7 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "ssml-document": "^1.1.4",
+    "tts": "workspace:^",
     "utf-8-validate": "^5.0.2"
   },
   "devDependencies": {
