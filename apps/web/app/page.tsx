@@ -1,20 +1,71 @@
 "use client";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { Button, Header, Slide } from "ui";
 import type { SlideImageProps, SlideRef } from "ui";
 
-const TEXT = `健康饮食指南:吃什么可以让你更健康?
-亲爱的朋友们,您是否也想通过饮食来改善健康呢?其实,通过选择一些营养丰富的食物,我们可以很容易地让身体更健康。
-1. 水果和蔬菜
-水果和蔬菜富含维生素、矿物质和膳食纤维,对身体大有裨益。例如苹果、梨、西蓝花和菠菜都含有丰富的抗氧化成分,可以帮助预防疾病。
-2. 全谷物和豆类
-全谷物面包和米饭以及各种豆类如黑豆和绿豆,都富含复杂碳水化合物和蛋白质,有助于长期饱腹和健康。
-3. 鱼类和蛋
-鱼类如三文鱼和鲑鱼富含omega-3脂肪酸,有益心脏健康。而蛋白质丰富的鸡蛋也是健康的选择。
-4. 坚果和种子
-坚果如核桃和瓜子,以及亚麻籽和芥花籽都富含营养,可以作为零食选择。
-5. 保持水分充足
-每天喝足够的水,可以帮助身体各系统正常运行。清水和绿茶都是很好的选择。`;
+function generateWebVTT(textSegments: string[], audioDuration: number): string {
+  let webVTTContent = "WEBVTT\n\n"; // WebVTT header
+  // Format a timestamp in HH:MM:SS.SSS format
+  const formatTimestamp = (timestamp: number): string => {
+    const hours = Math.floor(timestamp / 3600);
+    const minutes = Math.floor((timestamp % 3600) / 60);
+    const seconds = Math.floor(timestamp % 60);
+    const milliseconds = Math.round((timestamp % 1) * 1000);
+
+    return `${String(hours).padStart(2, "0")}:${String(minutes).padStart(
+      2,
+      "0",
+    )}:${String(seconds).padStart(2, "0")}.${String(milliseconds).padStart(
+      3,
+      "0",
+    )}`;
+  };
+
+  const segmentDuration = audioDuration / textSegments.length;
+  let currentTime = 0;
+
+  for (const textSegment of textSegments) {
+    const startTimestamp = formatTimestamp(currentTime);
+    currentTime += segmentDuration;
+    const endTimestamp = formatTimestamp(currentTime);
+
+    webVTTContent += `${startTimestamp} --> ${endTimestamp}\n`;
+    webVTTContent += `${textSegment}\n\n`;
+  }
+
+  // Save the generated WebVTT content to a file or display it on a webpage.
+  return webVTTContent;
+}
+
+function parseHTMLText(input: string): { text: string; list: string[] } {
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(input, "text/html");
+
+  // add list number
+  [...doc.body.querySelectorAll("h2")].map(
+    (item: HTMLElement, index) =>
+      (item.innerHTML = `${index + 1}.${item.innerHTML}`),
+  );
+
+  const list: string[] = doc.body.innerText
+    .replace(/{{image}}/g, "")
+    .split(" ")
+    .reduce((acc: string[], v) => [...acc, ...v.split("。")], [])
+    .filter(Boolean);
+
+  const text = doc.body.innerText
+    .replace(/{{image}}/g, "")
+    .split(" ")
+    .filter(Boolean)
+    .join("\n");
+
+  return { text, list };
+}
+
+// Example usage:
+const inputHTML = `<h1>家里常见的过敏源</h1> <p>除了花粉之外,家里还可能存在其他常见的过敏源。了解这些过敏源对控制过敏反应很有帮助。</p>  <h2>宠物</h2>{{image}}   <p>猫狗的皮毛和唾液可能包含过敏原,特别是如果家里养猫。定期清洁和除尘可以减少过敏风险。</p>  <h2>尘螨</h2>{{image}} <p>尘螨及其粪便可能引起过敏。应定期清洁,更换床上用品可以杜绝尘螨。</p>   <h2>霉菌</h2>{{image}} <p>潮湿的环境有利于霉菌生长。应保持房屋通风和定期除霉来防止过敏。</p>`; // Replace with your input HTML
+const { text: TEXT, list } = parseHTMLText(inputHTML);
+
 const images: SlideImageProps[] = [
   { src: "https://swiperjs.com/demos/images/nature-1.jpg", duration: 1000 },
   { src: "https://swiperjs.com/demos/images/nature-2.jpg", duration: 4000 },
@@ -28,11 +79,18 @@ const images: SlideImageProps[] = [
 
 export default function Page(): JSX.Element {
   const slideRef = useRef<SlideRef>(null);
+  const [webVTT, setWebVTT] = useState<string>("");
 
   const startAutoplay = async () => {
     const source = await getAudioSource(TEXT);
-    console.log(source.buffer?.duration);
     source.start();
+
+    if (source.buffer?.duration) {
+      const webvtt = generateWebVTT(list, source.buffer.duration);
+      console.log(webvtt);
+      setWebVTT(webvtt);
+    }
+
     // Call the startAutoplay function on the Slide component
     slideRef.current?.startAutoplay();
   };
@@ -61,6 +119,7 @@ export default function Page(): JSX.Element {
       <Button />
       <button onClick={startAutoplay}>Start Autoplay</button>
       <Slide effect="fade" images={images} ref={slideRef} size={[360, 640]} />
+      {webVTT}
     </>
   );
 }
