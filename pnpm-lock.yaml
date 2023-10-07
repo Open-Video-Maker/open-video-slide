@@ -153,6 +153,9 @@ importers:
       ui:
         specifier: workspace:*
         version: link:../../packages/ui
+      vtt.js:
+        specifier: ^0.13.0
+        version: 0.13.0
     devDependencies:
       '@next/eslint-plugin-next':
         specifier: ^13.4.19
@@ -7684,6 +7687,10 @@ packages:
       - supports-color
       - terser
     dev: true
+
+  /vtt.js@0.13.0:
+    resolution: {integrity: sha512-t0OJvTmsryCOIHdLWmUPx6V3e0MRGaZMp0Cr5DETWrWNfg9RCHcQlF7X7zNF4mQxhtkyiVKOefdSErSB/KWgOA==}
+    dev: false
 
   /w3c-xmlserializer@4.0.0:
     resolution: {integrity: sha512-d+BFHzbiCx6zGfz0HyQ6Rg69w9k19nviJspaj4yNscGjrHu94sVP+aRm75yEbCh+r2/yR+7q6hux9LVtbuTGBw==}

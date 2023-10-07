@@ -2,6 +2,29 @@
 import { useRef, useState } from "react";
 import { Button, Header, Slide } from "ui";
 import type { SlideImageProps, SlideRef } from "ui";
+import * as VTT from "vtt.js";
+
+interface VttCue {
+  startTime: number;
+  endTime: number;
+  text: string;
+}
+interface WebVTTParser {
+  oncue: (cue: VttCue) => void;
+  parse: (vtt: string) => void;
+  flush: () => void;
+}
+
+class WebVTTInterface {
+  processCues: (
+    window: Window,
+    cues: VTTCue[],
+    overlay: HTMLElement,
+  ) => HTMLElement[];
+  StringDecoder: () => TextDecoder;
+  convertCueToDOMTree: (cue: VTTCue) => HTMLElement;
+  Parser: new (window: Window, decoder: TextDecoder) => WebVTTParser;
+}
 
 function generateWebVTT(textSegments: string[], audioDuration: number): string {
   let webVTTContent = "WEBVTT\n\n"; // WebVTT header
@@ -79,23 +102,41 @@ const images: SlideImageProps[] = [
 
 export default function Page(): JSX.Element {
   const slideRef = useRef<SlideRef>(null);
-  const [webVTT, setWebVTT] = useState<string>("");
+  const [curVTT, setCurVTT] = useState("");
 
-  const startAutoplay = async () => {
+  const startAutoplay = async (): Promise<void> => {
     const source = await getAudioSource(TEXT);
     source.start();
 
     if (source.buffer?.duration) {
-      const webvtt = generateWebVTT(list, source.buffer.duration);
-      console.log(webvtt);
-      setWebVTT(webvtt);
+      const { WebVTT } = VTT as unknown as { WebVTT: WebVTTInterface };
+      const vtt = generateWebVTT(list, source.buffer.duration);
+      const parser = new WebVTT.Parser(window, WebVTT.StringDecoder());
+      const cues: VttCue[] = [];
+      parser.oncue = function oncueHandler(cue) {
+        cues.push(cue);
+      };
+      parser.parse(vtt);
+      parser.flush();
+
+      // Sort the cues by start time
+      cues.sort((a, b) => a.startTime - b.startTime);
+
+      // Display cues one by one with the correct timing
+      for (const cue of cues) {
+        setTimeout(() => {
+          setCurVTT(cue.text);
+        }, cue.startTime * 1000);
+      }
     }
 
     // Call the startAutoplay function on the Slide component
     slideRef.current?.startAutoplay();
   };
 
-  const getAudioSource = async (text: string) => {
+  const getAudioSource = async (
+    text: string,
+  ): Promise<AudioBufferSourceNode> => {
     const res = await fetch("/api/tts", {
       method: "POST",
       headers: {
@@ -117,9 +158,41 @@ export default function Page(): JSX.Element {
     <>
       <Header text="Web" />
       <Button />
-      <button onClick={startAutoplay}>Start Autoplay</button>
-      <Slide effect="fade" images={images} ref={slideRef} size={[360, 640]} />
-      {webVTT}
+      <button
+        onClick={() => {
+          void startAutoplay();
+        }}
+        type="button"
+      >
+        Start Autoplay
+      </button>
+      <div style={{ position: "relative" }}>
+        <Slide effect="fade" images={images} ref={slideRef} size={[360, 640]} />
+        <div
+          id="overlay"
+          style={{
+            position: "absolute",
+            width: "360px",
+            height: "640px",
+            top: "50px",
+            margin: "0 auto",
+            left: "50%",
+            marginLeft: "-180px",
+            zIndex: 1,
+          }}
+        >
+          <div
+            style={{
+              fontSize: 16,
+              color: "#fff",
+              backgroundColor: "rgba(0,0,0,0.33)",
+              textAlign: "center",
+            }}
+          >
+            {curVTT}
+          </div>
+        </div>
+      </div>
     </>
   );
 }
