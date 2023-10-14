@@ -1,8 +1,13 @@
 import { Document, ServiceProvider } from "ssml-document";
 // import { esMain } from "@/utils";
 
-type SSMLOptions = {
+export type SSMLOptions = {
   text: string;
+  lang?: string;
+  voice?: string;
+  voiceStyle?: string;
+  voiceSpeed?: string;
+  voicePitch?: string;
 };
 export function generate({ text }: SSMLOptions) {
   const doc = new Document();
