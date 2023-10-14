@@ -16,8 +16,7 @@ model Material {
   updatedAt DateTime @updatedAt
   content   String
   imageList String?
-  audio     Audio?   @relation(fields: [audioId], references: [id])
-  audioId   String?  @unique
+  audio  Audio?
 }
 
 model Audio {
@@ -26,5 +25,6 @@ model Audio {
   updatedAt DateTime  @updatedAt
   url       String
   detail    String
-  material  Material?
+  material     Material?   @relation(fields: [materialId], references: [id])
+  materialId   String?  @unique
 }
