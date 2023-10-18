@@ -4,16 +4,27 @@ import { Document, ServiceProvider } from "ssml-document";
 export type SSMLOptions = {
   text: string;
   lang?: string;
-  voice?: string;
+  voiceName: string;
   voiceStyle?: string;
-  voiceSpeed?: string;
+  voiceSpeed?: number;
   voicePitch?: string;
 };
-export function generate({ text }: SSMLOptions) {
+export function generate({
+  text,
+  lang,
+  voiceName,
+  voiceStyle,
+  voiceSpeed,
+  voicePitch,
+}: SSMLOptions) {
   const doc = new Document();
   const ssml = doc
-    .voice("zh-CN-XiaoxiaoNeural")
-    .prosody({ rate: 1.5, pitch: 1.1 })
+    .voice(voiceName)
+    .prosody({
+      rate: (voiceSpeed ?? 50) / 50,
+      pitch: voicePitch?.toLowerCase() ?? "default",
+    })
+    .expressAs({ style: voiceStyle?.toLowerCase() ?? "gentle" })
     .say(text)
     .up()
     .up()
@@ -21,10 +32,12 @@ export function generate({ text }: SSMLOptions) {
       pretty: true,
       provider: ServiceProvider.Microsoft,
     });
-  return ssml;
+
+  const wrap = `<speak version="1.0" xmlns="http://www.w3.org/2001/10/synthesis" xmlns:mstts="http://www.w3.org/2001/mstts" xml:lang="${lang}">{children}</speak>`;
+  return wrap.replace("{children}", ssml);
 }
 
 // if (esMain(import.meta.url)) {
-//   const ssml = generate({ text: "你好" });
+//   const ssml = generate({ text: "你好", voiceName: "xxx" });
 //   console.log(ssml);
 // }

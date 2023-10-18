@@ -13,7 +13,7 @@ import {
   Textarea,
 } from "@mantine/core";
 import { IconPlayerPlay } from "@tabler/icons-react";
-import useSWR, { SWRConfig } from "swr";
+import useSWR from "swr";
 import * as R from "ramda";
 
 import { VoicePitch, VoicePitchValues } from "./constants";
@@ -42,7 +42,7 @@ export default function Playground() {
     return R.groupBy((voice) => (voice as any).LocaleName)(voices);
   }, [voices]);
 
-  console.log(voicesData);
+  // console.log(voicesData);
 
   const langList = useMemo(
     () =>
@@ -82,7 +82,26 @@ export default function Playground() {
   }, [voiceStyleList]);
 
   const generate = async (text: string) => {
-    const payload = { text, lang, voice, voiceStyle, voiceSpeed, voicePitch };
+    const voiceName = (
+      voicesData[lang!]!.find((v) => {
+        return (v as any).LocalName === voice;
+      }) as any
+    ).ShortName;
+
+    const langCode = (
+      voicesData[lang!]!.find((v) => {
+        return (v as any).LocalName === voice;
+      }) as any
+    ).Locale;
+
+    const payload = {
+      text,
+      lang: langCode,
+      voiceName,
+      voiceStyle,
+      voiceSpeed,
+      voicePitch,
+    };
     const res = await fetch("/api/tts/ssml", {
       method: "POST",
       headers: {
@@ -90,18 +109,20 @@ export default function Playground() {
       },
       body: JSON.stringify(payload),
     });
-    console.log(payload, await res.json());
-    // const buffer = await res.arrayBuffer();
-    // setAudio(buffer);
-    // setAudioUrl(URL.createObjectURL(new Blob([buffer], { type: "audio/wav" })));
+    // const { ssml } = await res.json();
 
-    // const audioContext = new AudioContext();
-    // audioContext.decodeAudioData(buffer, (audioBuffer) => {
-    //   const source = audioContext.createBufferSource();
-    //   source.buffer = audioBuffer;
-    //   source.connect(audioContext.destination);
-    //   source.start();
-    // });
+    // console.log(payload, ssml);
+    const buffer = await res.arrayBuffer();
+    setAudio(buffer);
+    setAudioUrl(URL.createObjectURL(new Blob([buffer], { type: "audio/wav" })));
+
+    const audioContext = new AudioContext();
+    audioContext.decodeAudioData(buffer, (audioBuffer) => {
+      const source = audioContext.createBufferSource();
+      source.buffer = audioBuffer;
+      source.connect(audioContext.destination);
+      source.start();
+    });
   };
 
   const textValid = text.length > 0;
@@ -154,7 +175,7 @@ export default function Playground() {
                   mt="xs"
                   style={{ flex: 1 }}
                   color="blue"
-                  value={50}
+                  defaultValue={50}
                   marks={[
                     { value: 0, label: "Slow" },
                     { value: 50, label: "Regular" },

@@ -7,4 +7,11 @@ export enum VoicePitch {
   Default = "Default",
 }
 
-export const VoicePitchValues = Object.values(VoicePitch);
+export const VoicePitchValues = [
+  { value: "x-high", label: "Extra High" },
+  { value: "high", label: "High" },
+  { value: "medium", label: "Medium" },
+  { value: "low", label: "Low" },
+  { value: "x-low", label: "Extra Low" },
+  { value: "default", label: "Default" },
+];
