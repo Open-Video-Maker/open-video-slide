@@ -42,8 +42,6 @@ export default function Playground() {
     return R.groupBy((voice) => (voice as any).LocaleName)(voices);
   }, [voices]);
 
-  // console.log(voicesData);
-
   const langList = useMemo(
     () =>
       Object.keys(voicesData).filter((lang) => /(Chinese|English)/i.test(lang)),
@@ -102,6 +100,7 @@ export default function Playground() {
       voiceSpeed,
       voicePitch,
     };
+
     const res = await fetch("/api/tts/ssml", {
       method: "POST",
       headers: {
@@ -109,9 +108,7 @@ export default function Playground() {
       },
       body: JSON.stringify(payload),
     });
-    // const { ssml } = await res.json();
 
-    // console.log(payload, ssml);
     const buffer = await res.arrayBuffer();
     setAudio(buffer);
     setAudioUrl(URL.createObjectURL(new Blob([buffer], { type: "audio/wav" })));
@@ -146,6 +143,7 @@ export default function Playground() {
               value={lang}
               onChange={setLang}
             />
+
             <Group grow gap="xl">
               <Select
                 size="md"
@@ -165,6 +163,7 @@ export default function Playground() {
                 onChange={setVoiceStyle}
               />
             </Group>
+
             <Group grow gap="xl" style={{ alignItems: "stretch" }}>
               <Stack gap={0} justify="space-between">
                 <Text size="md" fw={500}>
@@ -193,6 +192,7 @@ export default function Playground() {
                 onChange={setVoicePitch}
               />
             </Group>
+
             <Textarea
               autosize
               size="md"
@@ -205,6 +205,7 @@ export default function Playground() {
           </Stack>
 
           <Text mt="lg">Preview</Text>
+
           <Group grow gap="xl">
             <Group p="xs" className="border border-slate-300 rounded">
               <ActionIcon

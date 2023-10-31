@@ -1,15 +1,11 @@
-import fs from "node:fs";
+import { getObject } from "@/app/api/_rpc/r2";
 
-export async function POST(request: Request) {
-  // const { text, language, voiceName } = await request.json();
+export async function GET() {
+  const video = await getObject({ Key: "output.mp4" });
 
-  const audioPath = process.cwd() + "/public/demo.wav";
-
-  const audio = fs.readFileSync(audioPath);
-
-  return new Response(audio, {
+  return new Response(video, {
     headers: {
-      "Content-Type": "audio/wav",
+      "Content-Type": "video/mp4",
     },
   });
 }
