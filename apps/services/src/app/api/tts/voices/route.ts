@@ -27,6 +27,7 @@ export async function GET() {
   });
   const r = await resp.json();
   await redis.json.set("voices", "$", r);
+  await redis.expire("voices", 60 * 60 * 24 * 10);
 
   return Response.json(r);
 }
