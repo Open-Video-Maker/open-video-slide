@@ -1,0 +1,39 @@
+{
+  "name": "services",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev -p 4200",
+    "build": "next build",
+    "start": "next start -p 4200",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.438.0",
+    "@mantine/core": "7.0.0-beta.5",
+    "@mantine/hooks": "7.0.0-beta.5",
+    "@tabler/icons-react": "^2.34.0",
+    "@upstash/redis": "^1.24.3",
+    "microsoft-cognitiveservices-speech-sdk": "^1.32.0",
+    "next": "14.0.0",
+    "ramda": "^0.29.1",
+    "react": "^18",
+    "react-dom": "^18",
+    "ssml-document": "^1.1.4",
+    "swr": "^2.2.4"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/ramda": "^0.29.7",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "autoprefixer": "^10",
+    "eslint": "^8",
+    "eslint-config-next": "14.0.0",
+    "postcss": "^8",
+    "postcss-preset-mantine": "^1.7.0",
+    "postcss-simple-vars": "^7.0.1",
+    "tailwindcss": "^3",
+    "typescript": "^5"
+  }
+}
