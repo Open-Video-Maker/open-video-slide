@@ -18,18 +18,25 @@ export async function POST(request: Request) {
     voicePitch,
   });
 
-  const tts = new TTSService({ language: lang, voiceName });
-  const audio = await tts.speakSSMLAsync(ssml);
+  try {
+    const tts = new TTSService({ language: lang, voiceName });
+    const { audioData: audio, audioDuration } = await tts.speakSSMLAsync(ssml);
 
-  const hasher = createHash("sha256");
-  hasher.update(text);
-  const key = hasher.digest("hex");
+    const hasher = createHash("sha256");
+    hasher.update(text);
+    const key = hasher.digest("hex");
 
-  putObject({ Key: key, Body: Buffer.from(audio), ContentType: "audio/wav" });
+    await putObject({
+      Key: key,
+      Body: Buffer.from(audio),
+      ContentType: "audio/wav",
+    });
 
-  return new Response(audio, {
-    headers: {
-      "Content-Type": "audio/wav",
-    },
-  });
+    return new Response(JSON.stringify({ key, audioDuration }), {
+      headers: { "Content-Type": "application/json" },
+    });
+  } catch (error) {
+    console.trace(error);
+    return new Response("tts/r2 error", { status: 500 });
+  }
 }

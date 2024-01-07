@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   Card,
   Text,
@@ -28,8 +28,13 @@ export default function Playground() {
     VoicePitch.Default,
   );
 
-  const [audio, setAudio] = useState<ArrayBuffer>();
+  const audioRef = useRef<HTMLAudioElement>(null);
   const [audioUrl, setAudioUrl] = useState<string>("");
+
+  useEffect(() => {
+    if (!audioUrl) return;
+    audioRef.current?.play();
+  }, [audioUrl]);
 
   const {
     data: voices,
@@ -101,25 +106,18 @@ export default function Playground() {
       voicePitch,
     };
 
-    const res = await fetch("/api/tts/ssml", {
+    await fetch("/api/tts/ssml", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(payload),
-    });
-
-    const buffer = await res.arrayBuffer();
-    setAudio(buffer);
-    setAudioUrl(URL.createObjectURL(new Blob([buffer], { type: "audio/wav" })));
-
-    const audioContext = new AudioContext();
-    audioContext.decodeAudioData(buffer, (audioBuffer) => {
-      const source = audioContext.createBufferSource();
-      source.buffer = audioBuffer;
-      source.connect(audioContext.destination);
-      source.start();
-    });
+    })
+      .then((res) => res.json())
+      .then(({ key }) => {
+        const audioUrl = `${process.env.R2Host}/${key}`;
+        setAudioUrl(audioUrl);
+      });
   };
 
   const textValid = text.length > 0;
@@ -223,6 +221,7 @@ export default function Playground() {
             </Button>
           </Group>
         </Card>
+        <audio ref={audioRef} src={audioUrl}></audio>
       </div>
     </>
   );
