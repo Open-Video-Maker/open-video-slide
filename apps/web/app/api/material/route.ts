@@ -1,18 +1,19 @@
 import { PrismaClient } from "@prisma/client";
-import type { Prisma } from "@prisma/client";
 
 const SEPARATOR = ";;";
 
 export async function POST(req: Request): Promise<Response> {
   const prisma = new PrismaClient();
-  const { content, imageList } =
-    (await req.json()) as Prisma.MaterialCreateInput;
+  const { contentList, imageList } = (await req.json()) as {
+    contentList: string[];
+    imageList: string[];
+  };
 
-  if (typeof content === "string" && Array.isArray(imageList)) {
+  if (Array.isArray(contentList) && Array.isArray(imageList)) {
     try {
       const material = await prisma.material.create({
         data: {
-          content,
+          contentList: contentList.join(SEPARATOR),
           imageList: imageList.join(SEPARATOR),
         },
       });
@@ -34,6 +35,6 @@ export async function GET(req: Request): Promise<Response> {
     });
     return new Response(JSON.stringify(material || {}), {});
   } catch (error) {
-    return new Response(error, { status: 500 });
+    return new Response("Validation Failed", { status: 500 });
   }
 }
