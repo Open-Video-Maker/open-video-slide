@@ -74,8 +74,7 @@ const Wrapper = styled.div<{ width: number; height: number }>`
   .swiper {
     width: ${({ width }) => width}px;
     height: ${({ height }) => height}px;
-    padding-top: 50px;
-    padding-bottom: 50px;
+    margin: 0;
   }
 
   .swiper-slide {

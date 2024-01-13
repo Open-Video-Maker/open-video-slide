@@ -60,13 +60,19 @@ export class TTSService {
   }
 
   speakSSMLAsync(ssml: string) {
-    return new Promise<ArrayBuffer>((resolve, reject) => {
+    return new Promise<{
+      audioData: ArrayBuffer;
+      audioDuration: number;
+    }>((resolve, reject) => {
       console.log("speakSSMLAsync", ssml);
       this.synthesizer.speakSsmlAsync(
         ssml,
         (result) => {
           if (result.reason === ResultReason.SynthesizingAudioCompleted) {
-            resolve(result.audioData);
+            resolve({
+              audioData: result.audioData,
+              audioDuration: result.audioDuration,
+            });
           } else {
             console.trace(
               "Speech synthesis canceled, " +
