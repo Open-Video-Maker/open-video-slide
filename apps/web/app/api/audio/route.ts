@@ -1,7 +1,5 @@
 import { PrismaClient, type Prisma } from "@prisma/client";
 
-const SEPARATOR = ";;";
-
 export async function POST(req: Request): Promise<Response> {
   const prisma = new PrismaClient();
   const { url, detail, materialId } =
@@ -18,7 +16,13 @@ export async function POST(req: Request): Promise<Response> {
           materialId,
         },
       });
-      return new Response(JSON.stringify(audio), {});
+      return new Response(
+        JSON.stringify({
+          status: 0,
+          data: { audio },
+        }),
+        {},
+      );
     } catch (error) {
       return new Response(error, { status: 500 });
     }
@@ -33,21 +37,13 @@ export async function GET(req: Request): Promise<Response> {
   try {
     const audio = await prisma.audio.findUnique({
       where: { id: id ?? undefined },
-      include: { material: true },
     });
 
     if (audio) {
       return new Response(
         JSON.stringify({
           status: 0,
-          data: {
-            ...audio,
-            material: {
-              ...audio.material,
-              contentList: audio.material?.contentList.split(SEPARATOR),
-              imageList: audio.material?.imageList?.split(SEPARATOR),
-            },
-          },
+          data: { audio },
         }),
         {},
       );

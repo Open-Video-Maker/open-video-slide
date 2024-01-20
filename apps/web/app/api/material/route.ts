@@ -17,7 +17,13 @@ export async function POST(req: Request): Promise<Response> {
           imageList: imageList.join(SEPARATOR),
         },
       });
-      return new Response(JSON.stringify(material), {});
+      return new Response(
+        JSON.stringify({
+          status: 0,
+          data: { material },
+        }),
+        {},
+      );
     } catch (error) {
       return new Response(error, { status: 500 });
     }
@@ -32,8 +38,15 @@ export async function GET(req: Request): Promise<Response> {
   try {
     const material = await prisma.material.findUnique({
       where: { id: id ?? undefined },
+      include: { audios: true },
     });
-    return new Response(JSON.stringify(material || {}), {});
+    return new Response(
+      JSON.stringify({
+        status: 0,
+        data: { material },
+      }),
+      {},
+    );
   } catch (error) {
     return new Response("Validation Failed", { status: 500 });
   }

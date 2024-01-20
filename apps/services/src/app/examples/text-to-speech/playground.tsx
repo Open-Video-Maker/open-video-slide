@@ -111,11 +111,11 @@ export default function Playground() {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(payload),
+      body: JSON.stringify({ body: payload }),
     })
       .then((res) => res.json())
       .then(({ key }) => {
-        const audioUrl = `${process.env.R2Host}/${key}`;
+        const audioUrl = `${process.env.NEXT_PUBLIC_R2Host}/${key}`;
         setAudioUrl(audioUrl);
       });
   };

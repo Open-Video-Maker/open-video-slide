@@ -10,21 +10,22 @@ datasource db {
   url      = "file:./dev.db"
 }
 
+// material and audio is one-to-many relation.
 model Material {
   id          String   @id @default(cuid())
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-  contentList String // split by ;;. If has multi content, the detail field in Audio should has detail config for each content.
-  imageList   String? // split by ;;. If exist, used for making video.
-  audio       Audio?
+  contentList String   // split by ;;. If has multi content, the detail field in Audio should have detail config for each content.
+  imageList   String?  // split by ;;. If exist, used for making video.
+  audios      Audio[]  // Define the one-to-many relationship
 }
 
 model Audio {
-  id         String    @id @default(cuid())
-  createdAt  DateTime  @default(now())
-  updatedAt  DateTime  @updatedAt
-  url        String // if is an empty string, means there are multi link in detail field.
-  detail     String // should be JSON string
+  id         String   @id @default(cuid())
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  url        String
+  detail     String   // Should be JSON string, e.g., { duration: 100, order: 1 }
   material   Material? @relation(fields: [materialId], references: [id])
-  materialId String?   @unique
+  materialId String?   // No @unique here, as it's a foreign key
 }
