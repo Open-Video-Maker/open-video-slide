@@ -17,12 +17,10 @@ export async function POST(req: Request): Promise<Response> {
         },
       });
       return new Response(
-        JSON.stringify(
-          JSON.stringify({
-            status: 0,
-            data: { audio },
-          }),
-        ),
+        JSON.stringify({
+          status: 0,
+          data: { audio },
+        }),
         {},
       );
     } catch (error) {
