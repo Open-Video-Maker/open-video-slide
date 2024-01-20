@@ -6,9 +6,9 @@ import { putObject } from "../../_rpc/r2";
 import { generate, SSMLOptions } from "./generate-ms-ssml";
 
 export async function POST(request: Request) {
-  const { text, lang, voiceName, voiceStyle, voiceSpeed, voicePitch } =
-    (await request.json()) as SSMLOptions;
-
+  const { text, lang, voiceName, voiceStyle, voiceSpeed, voicePitch } = (
+    await request.json()
+  ).body as SSMLOptions;
   const ssml = generate({
     text,
     lang,
@@ -36,7 +36,7 @@ export async function POST(request: Request) {
       headers: { "Content-Type": "application/json" },
     });
   } catch (error) {
-    console.trace(error);
+    console.log(error);
     return new Response("tts/r2 error", { status: 500 });
   }
 }

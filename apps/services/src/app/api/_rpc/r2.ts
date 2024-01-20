@@ -27,8 +27,12 @@ export async function putObject({
   Body,
   ...rests
 }: PutObjectParams) {
-  const result = await S3.send(
-    new PutObjectCommand({ Bucket: Bucket ?? "ovm", Key, Body, ...rests }),
-  );
-  return result;
+  try {
+    const result = await S3.send(
+      new PutObjectCommand({ Bucket: Bucket ?? "ovm", Key, Body, ...rests }),
+    );
+    return result;
+  } catch (error) {
+    console.log(error);
+  }
 }
